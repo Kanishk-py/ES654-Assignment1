@@ -83,7 +83,7 @@ class DecisionTree:
             for attr in list(X.columns):
                 info_gain = information_gain(y, X[attr], self.criterion)
                 
-                if X[attr].dtypes.name == "float64":
+                if X[attr].dtypes.name != "category":
                     info_gain, possible_split = info_gain[0], info_gain[1]
                     
                 if info_gain > max_info_gain:

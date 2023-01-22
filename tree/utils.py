@@ -7,8 +7,8 @@ def entropy(Y: pd.Series) -> float:
     """
     Function to calculate the entropy
     """
-    value, counts = np.unique(Y, return_counts=True)
-    prob = counts / counts.sum()
+    value, counts = np.unique(Y, return_counts=True)  #value = all the classes, counts = number of occurances of each class
+    prob = counts / counts.sum()                      
     entropy = 0
     for p in prob:
         entropy -= p * np.log2(p)
@@ -42,7 +42,7 @@ def information_gain(Y: pd.Series, attr: pd.Series, criterion: Literal["informat
         return info_gain
     
     # Real Input and Discrete Output
-    elif (Y.dtypes.name == "category" and attr.dtypes.name == "float64"):
+    elif (Y.dtypes.name == "category" and attr.dtypes.name != "category"):
         dataset = pd.concat([Y, attr], axis=1, join='inner')
         dataset.columns = ['Y', 'attr']
         dataset.sort_values(by=['attr', 'Y'], inplace=True)
@@ -67,7 +67,7 @@ def information_gain(Y: pd.Series, attr: pd.Series, criterion: Literal["informat
         return max_info_gain, split
 
     # Real Input and Real Output
-    elif (Y.dtypes.name == "float64" and attr.dtypes.name == "float64"):
+    elif (Y.dtypes.name != "category" and attr.dtypes.name != "category"):
         dataset = pd.concat([Y, attr], axis=1, join='inner')
         dataset.columns = ['Y', 'attr']
         dataset.sort_values(by=['attr', 'Y'], inplace=True)
@@ -92,7 +92,7 @@ def information_gain(Y: pd.Series, attr: pd.Series, criterion: Literal["informat
         return max_info_gain, split
 
     # Discrete Input and Real Output
-    elif (Y.dtypes.name == "float64" and attr.dtypes.name == "category"):
+    elif (Y.dtypes.name != "category" and attr.dtypes.name == "category"):
         info_gain = np.var(Y)
         classes = attr.unique()
         for cls in classes:
