@@ -1,5 +1,6 @@
 from typing import Union
 import pandas as pd
+import numpy as np
 
 
 def accuracy(y_hat: pd.Series, y: pd.Series) -> float:
@@ -13,34 +14,41 @@ def accuracy(y_hat: pd.Series, y: pd.Series) -> float:
     ensure that the function does not fail in corner cases.
     """
     assert y_hat.size == y.size
-    # TODO: Write here
-    pass
+    
+    diff = (y == y_hat ).sum()
+    return float(diff) / y.size
 
 
 def precision(y_hat: pd.Series, y: pd.Series, cls: Union[int, str]) -> float:
     """
     Function to calculate the precision
     """
-    pass
+    TP = (y[y_hat == cls] == cls).sum()
+    yhat_true = (y_hat == cls).sum()
+
+    return float(TP) / yhat_true
+    
 
 
 def recall(y_hat: pd.Series, y: pd.Series, cls: Union[int, str]) -> float:
     """
     Function to calculate the recall
     """
-    pass
+    TP = (y[y_hat == cls] == cls).sum()
+    y_true = (y == cls).sum()
+
+    return float(TP) / y_true
 
 
 def rmse(y_hat: pd.Series, y: pd.Series) -> float:
     """
     Function to calculate the root-mean-squared-error(rmse)
     """
-
-    pass
+    return np.sqrt(np.mean((y_hat - y)**2))
 
 
 def mae(y_hat: pd.Series, y: pd.Series) -> float:
     """
     Function to calculate the mean-absolute-error(mae)
     """
-    pass
+    return (y_hat - y).abs().mean()
