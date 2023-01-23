@@ -23,6 +23,8 @@ def precision(y_hat: pd.Series, y: pd.Series, cls: Union[int, str]) -> float:
     """
     Function to calculate the precision
     """
+    assert y_hat.size == y.size
+
     TP = (y[y_hat == cls] == cls).sum()
     yhat_true = (y_hat == cls).sum()
 
@@ -34,6 +36,8 @@ def recall(y_hat: pd.Series, y: pd.Series, cls: Union[int, str]) -> float:
     """
     Function to calculate the recall
     """
+    assert y_hat.size == y.size
+
     TP = (y[y_hat == cls] == cls).sum()
     y_true = (y == cls).sum()
 
@@ -44,6 +48,10 @@ def rmse(y_hat: pd.Series, y: pd.Series) -> float:
     """
     Function to calculate the root-mean-squared-error(rmse)
     """
+    assert y_hat.size == y.size
+
+    y_hat = y_hat.reset_index(drop=True)
+    y = y.reset_index(drop=True)
     return np.sqrt(np.mean((y_hat - y)**2))
 
 
@@ -51,4 +59,8 @@ def mae(y_hat: pd.Series, y: pd.Series) -> float:
     """
     Function to calculate the mean-absolute-error(mae)
     """
+    assert y_hat.size == y.size
+    
+    y_hat = y_hat.reset_index(drop=True)
+    y = y.reset_index(drop=True)
     return (y_hat - y).abs().mean()

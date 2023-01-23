@@ -6,13 +6,16 @@ from tree.base import DecisionTree
 from metrics import *
 
 from sklearn.tree import DecisionTreeRegressor
+from sklearn.metrics import mean_squared_error
 
 np.random.seed(42)
 
 # Read real-estate data set
 # ...
 # 
-yX = pd.read_fwf("C:\\Users\\hii\\Desktop\\ML\\auto-mpg.data", header = None) 
+url = 'https://archive.ics.uci.edu/ml/machine-learning-databases/auto-mpg/auto-mpg.data'
+yX = pd.read_csv(url, delim_whitespace=True, header=None)
+
 yX.columns = ["mpg", "cylinders", "displacement", "horsepower", "weight", "acceleration", "model year", "origin", "car name"]  
 yX["horsepower"]  = yX["horsepower"].str.replace("?", "NaN", regex= False).astype(float)
 yX["horsepower"].fillna(value= yX["horsepower"].mean(), inplace=True) 
@@ -41,7 +44,7 @@ y_test = y_test.reset_index(drop=True)
 tree = DecisionTree(criterion= "information_gain")
 tree.fit(X_train, y_train) 
 
-# tree.plot() 
+tree.plot() 
 y_hat = tree.predict(X_test)  
 summary = {"Metric": ["RMSE", "MAE"], "Our_model":[], "Scikit":[]} 
 print(y_hat-y_test)
@@ -54,6 +57,7 @@ summary["Scikit"].append(rmse(y_hat_sk, y_test))
 summary["Scikit"].append(mae(y_hat_sk,  y_test)) 
 
 print(pd.DataFrame(summary))
+print(mean_squared_error(y_hat_sk, y_test))
 
 
 
