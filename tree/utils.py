@@ -7,7 +7,7 @@ def entropy(Y: pd.Series) -> float:
     """
     Function to calculate the entropy
     """
-    value, counts = np.unique(Y, return_counts=True)  #value = all the classes, counts = number of occurances of each class
+    value, counts = np.unique(Y, return_counts=True)
     prob = counts / counts.sum()                      
     entropy = 0
     for p in prob:
@@ -55,6 +55,7 @@ def information_gain(Y: pd.Series, attr: pd.Series, criterion: Literal["informat
 
         total_entropy = entropy(Y_new) if criterion == "information_gain" else gini_index(Y_new)
 
+		# Check for all possible splits and find best split
         for i in range(1, len(Attr)):
             if (Attr[i] != Attr[i-1]):
                 info_gain = total_entropy

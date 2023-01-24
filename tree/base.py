@@ -16,6 +16,7 @@ from tree.utils import entropy, information_gain, gini_index
 
 np.random.seed(42)
 
+# Class for nodes in the decision tree
 @dataclass
 class Node:
     """
@@ -27,7 +28,9 @@ class Node:
     position: int = None
     value: float = None
 
+    # Function to print the Decision Tree
     def printTree(self, gap: int = 4) -> None:
+        # Base Case
         if self.attr == None:
             print("{:.4f}".format(self.value))
             return
@@ -46,8 +49,10 @@ class Node:
                     print(f"?(X({self.attr}) > {'{:.4f}'.format(self.position)}):")
 
                 print(f"{' ' * gap}{ans}:", end=" ")
+            # Recursively call the function
             self.child_dict[i].printTree(gap+4)
 
+    # Function to recursively plot the Decision Tree
     def getVal(self, X: pd.DataFrame) -> float:
         if self.attr == None:
             return self.value
@@ -79,27 +84,35 @@ class DecisionTree:
         if len(X.columns) > 0 and depth < self.max_depth and len(list(X.columns)) != sum(list(X.nunique())):
 
             max_info_gain = -np.inf
-            possible_split = None
-            split_attr = None
+            possible_split = None # This will be used for Real Input
+            split_attr = None # This will be used to store the attribute to split on
 
+            # Loop over all the attributes to find the best attribute to split on
             for attr in list(X.columns):
                 info_gain = information_gain(y, X[attr], self.criterion)
                 
+                # If the attribute is continuous, we need to store the possible split position
                 if X[attr].dtypes.name != "category":
                     info_gain, possible_split = info_gain[0], info_gain[1]
-                    
+                
+                # If the information gain is greater than the maximum information gain, 
+                # update the maximum information gain and the split position
                 if info_gain > max_info_gain:
                     max_info_gain = info_gain
                     split_position = possible_split
                     split_attr = attr
-        
+
+            # Create a node
             currNode = Node(attr=split_attr)
+            # Extract the column to split on
             splitted_col = X[split_attr]
             if X[split_attr].dtypes.name == "category":
                 currNode.classification = "discrete"
+                # Loop over all discrete values to create child nodes
                 for i in splitted_col.unique():
                     currNode.child_dict[i] = self.build(X[splitted_col == i].drop(split_attr, axis=1), y[splitted_col == i], depth+1)
             else:
+                # Create left and right child nodes
                 currNode.classification = "continuous"
                 currNode.child_dict["right"] = self.build(X[splitted_col > split_position].drop(split_attr, axis=1), y[splitted_col > split_position], depth+1)
                 currNode.child_dict["left"] = self.build(X[splitted_col <= split_position].drop(split_attr, axis=1), y[splitted_col <= split_position], depth+1)

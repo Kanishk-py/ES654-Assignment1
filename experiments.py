@@ -54,6 +54,7 @@ def calculate_average_time(N: int, M: int, iterations: int, type: Literal['RR', 
 	return avg_fit_time, avg_predict_time
 
 
+# Plot average time taken by fit() and predict()
 def plot_results(n: int, m: int, iterations: int, DTtype: Literal['RR', 'DD', 'RD', 'DR']):
 	N = np.arange(1, n, 1)
 	M = np.arange(1, m, 1)
@@ -61,7 +62,6 @@ def plot_results(n: int, m: int, iterations: int, DTtype: Literal['RR', 'DD', 'R
 	avg_fit_time = []
 	avg_predict_time = []
 
-	# calculate average time taken by fit() and predict()
 	for i in N:
 		temp_fit_time = []
 		temp_predict_time = []
@@ -90,7 +90,7 @@ def plot_results(n: int, m: int, iterations: int, DTtype: Literal['RR', 'DD', 'R
 	ax.set_ylabel('M')
 	plt.savefig(f'img/{DTtype}_pred_time.png')
 
-
+# Plot for all four cases of DTs with N from 1 to 30 and M from 1 to 10 with average over 3 iterations
 plot_results(30, 10, 3, 'DD')
 plot_results(30, 10, 3, 'RD')
 plot_results(30, 10, 3, 'DR')
