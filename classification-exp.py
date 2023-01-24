@@ -15,7 +15,7 @@ n_features=2, n_redundant=0, n_informative=2, random_state=1, n_clusters_per_cla
 # For plotting
 import matplotlib.pyplot as plt
 plt.scatter(X[:, 0], X[:, 1], c=y)
-plt.show()
+# plt.show()
 
 #Splitting X and y (numpy arrays) into two parts in ratio 7:3 and making it a pandas dataframe
 X_train, X_test = np.split(X, [int(X.shape[0] * 0.7)])

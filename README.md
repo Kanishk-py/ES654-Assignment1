@@ -1,3 +1,8 @@
+Use output.txt as the output file for better formatting.
+``` 
+python "filename.py" > output.txt 
+```
+
 ### Questions
 
 1. Complete the decision tree implementation in tree/base.py. **[5 marks]**
